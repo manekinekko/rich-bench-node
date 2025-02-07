@@ -32,6 +32,15 @@ rich-bench benchmarks/ --benchmark encoding_format
 rich-bench benchmarks/ --percentage
 ```
 
+This will show the performance gains as percentages instead of multipliers.
+```
+┌──────────────────────────────────────────┬──────────┬───────────┬───────────┬─────────────────┬─────────────────────┬────────────────────┐
+│ Benchmark                                │ Min (ms) │  Max (ms) │ Mean (ms) │         Min (+) │             Max (+) │           Mean (+) │
+├──────────────────────────────────────────┼──────────┼───────────┼───────────┼─────────────────┼─────────────────────┼────────────────────┤
+│ Size of returned JSON: float vs base64   │   73.376 │ 19666.000 │  9844.744 │  44.430 (39.4%) │    8351.000 (57.5%) │   4213.139 (57.2%) │
+└──────────────────────────────────────────┴──────────┴───────────┴───────────┴─────────────────┴─────────────────────┴────────────────────┘
+```
+
 ### Repeat Benchmark Execution
 ```bash
 rich-bench benchmarks/ --repeat 100
