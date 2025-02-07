@@ -1,0 +1,20 @@
+{
+  "name": "rich-bench-node",
+  "version": "0.1.0",
+  "main": "index.js",
+  "bin": {
+    "rich-bench": "./bin/rich-bench.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "benchmark": "node examples/bench_encoding_format.js"
+  },
+  "keywords": [],
+  "author": "Wassim Chegham <github@wassim.dev>",
+  "license": "MIT",
+  "description": "A tiny benchmark tool for node.js (port of rich-bench by @tonybaloney)",
+  "dependencies": {
+    "argparse": "^2.0.1",
+    "cli-table3": "^0.6.5"
+  }
+}
