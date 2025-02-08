@@ -1,7 +1,8 @@
 const OpenAI = require("openai");
+require("dotenv").config();
 
 const openai = new OpenAI({
-    apiKey: "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",
+    apiKey: process.env.OPENAI_API_KEY,
 });
 function generateRandomString(length = 1000) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -12,10 +13,10 @@ function generateRandomString(length = 1000) {
     return result;
 }
 
-async function encoding_format_float(){
+async function encoding_format_float(inputSize){
     const emb = await openai.embeddings.create({
         model: "text-embedding-ada-002",
-        input: generateRandomString(1000),
+        input: generateRandomString(inputSize),
         encoding_format: "float"
     });
 
@@ -23,21 +24,11 @@ async function encoding_format_float(){
     return JSON.stringify(emb).length;
 }
 
-async function encoding_format_base64(){
+async function encoding_format_base64(inputSize){
     const emb = await openai.embeddings.create({
         model: "text-embedding-ada-002",
-        input: generateRandomString(1000),
+        input: generateRandomString(inputSize),
         encoding_format: "base64"
-    });
-
-    // return the length of the stringified object as the benchmark
-    return JSON.stringify(emb).length;
-}
-
-async function encoding_format_default() {
-    const emb = await openai.embeddings.create({
-        model: "text-embedding-ada-002",
-        input: generateRandomString(1000),
     });
 
     // return the length of the stringified object as the benchmark
@@ -46,20 +37,23 @@ async function encoding_format_default() {
 
 module.exports.__benchmarks__ = [
     [
-        encoding_format_float,
-        encoding_format_base64,
-        "Size of returned JSON: float vs base64"
+        encoding_format_float.bind(null, 100),
+        encoding_format_base64.bind(null, 100),
+        `100 bytes embedding: float vs base64`
     ],
     [
-
-        encoding_format_float,
-        encoding_format_default,
-        "Size of returned JSON: float vs default"
+        encoding_format_float.bind(null, 1_000),
+        encoding_format_base64.bind(null, 1_000),
+        `1kb embedding: float vs base64`
     ],
     [
-
-        encoding_format_base64,
-        encoding_format_default,
-        "Size of returned JSON: base64 vs default"
-    ]
+        encoding_format_float.bind(null, 5_000),
+        encoding_format_base64.bind(null, 5_000),
+        `5kb embedding: float vs base64`
+    ],
+    [
+        encoding_format_float.bind(null, 8_192),
+        encoding_format_base64.bind(null, 8_192),
+        `8kb embedding: float vs base64`
+    ],
 ];
