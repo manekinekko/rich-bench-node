@@ -73,36 +73,22 @@ rich-bench benchmarks/ --times 100
 Create a `bench_*.js` file inside `benchmarks/` and export an array of benchmark functions:
 
 ```javascript
-async function encoding_format_float(){
+async function encoding_format_float(inputSize) {
     const emb = await openai.embeddings.create({
         model: "text-embedding-ada-002",
-        input: generateRandomString(1000),
+        input: generateRandomString(inputSize),
         encoding_format: "float"
     });
-
-    // return the length of the stringified object as the benchmark
-    return JSON.stringify(emb).length;
+    return new Blob([emb.data[0].embedding]).size; // return bytes as the benchmark
 }
 
-async function encoding_format_base64(){
+async function encoding_format_base64(inputSize) {
     const emb = await openai.embeddings.create({
         model: "text-embedding-ada-002",
-        input: generateRandomString(1000),
+        input: generateRandomString(inputSize),
         encoding_format: "base64"
     });
-
-    // return the length of the stringified object as the benchmark
-    return JSON.stringify(emb).length;
-}
-
-async function encoding_format_default() {
-    const emb = await openai.embeddings.create({
-        model: "text-embedding-ada-002",
-        input: generateRandomString(1000),
-    });
-
-    // return the length of the stringified object as the benchmark
-    return JSON.stringify(emb).length;
+    return new Blob([emb.data[0].embedding]).size; // return bytes as the benchmark
 }
 
 module.exports.__benchmarks__ = [
@@ -110,18 +96,6 @@ module.exports.__benchmarks__ = [
         encoding_format_float,
         encoding_format_base64,
         "bench #1"
-    ],
-    [
-
-        encoding_format_float,
-        encoding_format_default,
-        "float vs default"
-    ],
-    [
-
-        encoding_format_base64,
-        encoding_format_default,
-        "base64 vs default"
     ]
 ];
 ```
