@@ -38,6 +38,6 @@ module.exports.__benchmarks__ = [
     [
         encoding_format_float.bind(null, 1_000),
         encoding_format_base64.bind(null, 1_000),
-        `1kb embedding: base64 vs float32`
+        `100 tokens embeddings`
     ]
 ];
